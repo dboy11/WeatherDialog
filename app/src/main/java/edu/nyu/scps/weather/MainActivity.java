@@ -49,8 +49,8 @@ public class MainActivity extends ActionBarActivity {
 
         //A builder object can create a dialog object.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Name");
-        builder.setMessage("Enter a name");
+        builder.setTitle("Zip code");
+        builder.setMessage("Enter a zip code");
 
         //This inflator reads the dialog.xml and creates the objects described therein.
         //Pass null as the parent view because it's going in the dialog layout.
@@ -160,12 +160,13 @@ public class MainActivity extends ActionBarActivity {
 
     private void useTheResult(String json) {
         TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setTextSize(24);
         if (json == null) {
             textView.setText("Couldn't get JSON string from server.");
             return;
         }
-        textView.setText("JSON string downloaded from server:\n\n");
-        textView.append(json + "\n\n");
+        //textView.setText("JSON string downloaded from server:\n\n");
+        //textView.append(json + "\n\n");
 
         //For documentation about
         //http://openweathermap.org/weather-data#current
@@ -174,18 +175,17 @@ public class MainActivity extends ActionBarActivity {
 
         try {
             JSONObject jSONObject = new JSONObject(json);
-            textView.append("Pretty printed version of JSON string:\n\n");
-            textView.append(jSONObject.toString(4) + "\n\n"); //number of spaces to indent
 
-            textView.append("The main part of the weather report:\n\n");
+            //textView.append("The main part of the weather report:\n\n");
             JSONObject main = jSONObject.getJSONObject("main");
-            textView.append(main.toString(4) + "\n\n");
+            //textView.append(main.toString(4) + "\n\n");
+            String city = jSONObject.getString("name");
 
             double fahrenheit = main.getDouble("temp");
-            textView.append("Woolworth Building temperature is " + fahrenheit + "\u00B0 Fahrenheit.\n");
+            textView.append("The temperature is " + fahrenheit + "\u00B0 Fahrenheit in " + city + "\n" );
 
             long seconds = jSONObject.getLong("dt"); //data receiving time, in seconds after 1970
-            SimpleDateFormat dateFormat = new SimpleDateFormat("K:m:s a EEEE, MMMM d, yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("K:mm:s a EEEE, MMMM d, yyyy");
             textView.append(dateFormat.format(1000L * seconds));   //convert seconds to milliseconds
         } catch (JSONException exception) {
             textView.setText("JSONException" + exception);
